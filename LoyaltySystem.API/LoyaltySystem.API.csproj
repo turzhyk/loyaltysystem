@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.25"/>
+        <PackageReference Include="Npgsql" Version="8.0.9" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LoyaltySystem.Application\LoyaltySystem.Application.csproj" />
+      <ProjectReference Include="..\LoyaltySystem.Domain\LoyaltySystem.Domain.csproj" />
+      <ProjectReference Include="..\LoyaltySystem.Infrastructure\LoyaltySystem.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
