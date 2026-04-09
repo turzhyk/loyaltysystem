@@ -2,7 +2,6 @@
 
 public enum DiscountType
 {
-    Percent, // Discount % for product
-    NPercent, // Discount % for N product of same Id
-    NFree // N product of same Id is free
+    Percent, // Discount % for product, Discount % for N product of same Type, N product of same Type is free
+    NCheapest // N product of same Type is free
 }
