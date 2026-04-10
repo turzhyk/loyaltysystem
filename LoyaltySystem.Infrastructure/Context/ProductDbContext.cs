@@ -12,4 +12,5 @@ public class ProductDbContext:DbContext
     }
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<DiscountEntity> GlobalDiscounts { get; set; }
+    public DbSet<UserDiscountEntity> UserDiscounts { get; set; }
 }

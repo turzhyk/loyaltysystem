@@ -7,9 +7,10 @@ public class Discount
 {
     public Guid Id { get; set; }
     public List<Guid> ProductsId { get; set; }
+    public decimal Percent { get; set; }
+    public DiscountApplyTo ApplyTo { get; set; }
     public decimal Limit { get; set; }
-    public DiscountType Type { get; set; }
-    public JsonObject Params { get; set; }
+    public int GroupSize { get; set; }
     public bool NeedActivation { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
