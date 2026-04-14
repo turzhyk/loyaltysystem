@@ -15,5 +15,6 @@ public class Discount
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public double DaysLeft(DateTime now) => (EndDate - now).TotalDays;
-
+    
+    // public static Discount Create () =>
 }

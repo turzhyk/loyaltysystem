@@ -7,13 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDB();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "_allow",
-        policy => { policy.WithOrigins("localhost:3000"); });
-});
+builder.Services.AddServices();
+builder.Services.AddCorsPolicies();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

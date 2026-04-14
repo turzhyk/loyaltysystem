@@ -1,6 +1,6 @@
 ﻿namespace LoyaltySystem.Application.Exceptions;
 
-public class UserExistsException:Exception
+public class UserNotFoundException:Exception
 {
     
 }

@@ -1,13 +1,13 @@
 ﻿services:
   database:
-    image: "postgres:latest"
-    container_name: "loyaltyDB"
+    image: postgres:15
+    container_name: loyaltyDB
     ports:
-      - 5432:5433
+      - "5432:5432"
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "12345"
-      POSTGRESS_DB: "userDB"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: userDB
     volumes:
       - ./db-data/:/var/lib/postgresql/dataL/
 

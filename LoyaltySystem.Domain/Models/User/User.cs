@@ -1,6 +1,6 @@
-﻿namespace LoyaltySystem.Infrastructure.Entities.User;
+﻿namespace LoyaltySystem.Domain.Models.User;
 
-public class UserEntity
+public class User
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

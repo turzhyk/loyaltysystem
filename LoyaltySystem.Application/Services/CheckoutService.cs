@@ -17,12 +17,13 @@ public class CheckoutService : ICheckoutService
         _calculator = calculator;
     }
 
-    public async Task<CartResponseDto> GetCalculatedCart(CartRequestDto dto)
+    public async Task<CartResponseDto> GetCalculatedCart(CartRequestDto dto, CancellationToken cToken)
     {
         Cart cart = new Cart();
         cart.Items = dto.Items.Select(x => new CartItem
             { ProductId = x.ProductId, Count = x.Count, UnitPrice = x.UnitPrice }).ToList();
-        //  get user id from user service by dto.UserCode
+
+        Guid userId = await _userService.GetUserIdByPhone(dto.UserCode, cToken);
         //  get used user discounts from repo
         //  get global discounts that apply to items in a cart
         

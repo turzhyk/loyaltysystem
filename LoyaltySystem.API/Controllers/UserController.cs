@@ -14,9 +14,23 @@ public class UserController :ControllerBase
         _userService = userService;
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserResponseDTO>> GetUser(Guid id)
+    public async Task<ActionResult<UserResponseDTO>> GetUser(Guid id, CancellationToken cToken)
     {
-        var result = await _userService.Get(id);
+        var result = await _userService.Get(id, cToken);
         return result;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] UserCreateRequestDto dto, CancellationToken cToken)
+    { 
+        await _userService.Create(dto, cToken);
+        return Ok();
+    }
+
+    [HttpPost("/confirm")]
+    public async Task<ActionResult<string>> Confirm([FromBody] UserConfirmRequestDto dto, CancellationToken cToken)
+    {
+        var result = await _userService.Confirm(dto, cToken);
+        return Ok(result);
     }
 }
