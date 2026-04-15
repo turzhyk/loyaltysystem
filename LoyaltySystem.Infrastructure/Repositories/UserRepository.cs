@@ -19,6 +19,8 @@ public class UserRepository:IUserRepository
     public async Task<Guid?> GetIdByPhone(string phone)
     {
         var result = await _context.Users.AsNoTracking().Where(u => u.Phone == phone).FirstOrDefaultAsync();
+        if (result == null)
+            return null;
         return result.Id;
     }
 

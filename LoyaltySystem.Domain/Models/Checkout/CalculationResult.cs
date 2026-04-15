@@ -1,4 +1,6 @@
-﻿namespace LoyaltySystem.Domain.Models.Checkout;
+﻿using LoyaltySystem.Domain.Models.Discount;
+
+namespace LoyaltySystem.Domain.Models.Checkout;
 
 public class CalculationResult
 {

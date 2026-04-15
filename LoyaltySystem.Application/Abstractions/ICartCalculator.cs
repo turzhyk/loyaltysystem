@@ -5,5 +5,6 @@ namespace LoyaltySystem.Application.Abstractions;
 
 public interface ICartCalculator
 {
-    public CalculationResult GetCalculated(Cart cart, List<Discount> discounts, Guid userId, List<UserDiscount> userDiscounts);
+    public CalculationResult GetCalculated(Cart cart, List<Discount> discounts, Guid userId,
+        List<UserDiscount> userDiscounts, DateTime now);
 }

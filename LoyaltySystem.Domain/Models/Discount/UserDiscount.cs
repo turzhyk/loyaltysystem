@@ -1,7 +1,8 @@
-﻿namespace LoyaltySystem.Domain.Models.Checkout;
+﻿namespace LoyaltySystem.Domain.Models.Discount;
 
 public class UserDiscount
 {
+    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public Guid DiscountId { get; set; }
     public decimal ProductsLeft { get; set; }
