@@ -10,14 +10,19 @@ public class UserService:IUserService
     private readonly IUserRepository _repo;
     private readonly IConfirmationService _confirmationService;
 
-    public UserService(IUserRepository repo, IConfirmationService confirmationService)
+    public UserService(IUserRepository repo,  IConfirmationService confirmationService)
     {
         _repo = repo;
         _confirmationService = confirmationService;
     }
     public async Task<UserResponseDTO> Get(Guid id, CancellationToken cToken)
     {
-        throw new NotImplementedException();
+
+        var exists = await _repo.UserWithIdExists(id, cToken);
+        if (!exists)
+            throw new UserNotFoundException();
+        var user = await _repo.GetById(id, cToken);
+        return new UserResponseDTO(user.Id, user.Name, user.Email, 0);
     }
 
     public async Task<Guid> GetUserIdByPhone(string phone, CancellationToken cToken)
@@ -28,6 +33,15 @@ public class UserService:IUserService
             throw new UserNotFoundException();
         return result.Value;
     }
+    public async Task<Guid> GetUserIdByPersonalCode(string phone, CancellationToken cToken)
+    {
+        // validate phone number
+        var result = await _repo.GetIdByPhone(phone);
+        if (result == null)
+            throw new UserNotFoundException();
+        return result.Value;
+    }
+
 
     public async Task<Guid> Create(UserCreateRequestDto dto, CancellationToken cToken)
     {
@@ -43,4 +57,5 @@ public class UserService:IUserService
         var result = await _confirmationService.TryConfirm(dto.userId, dto.confirmationCode);
         throw new NotImplementedException();
     }
+    
 }

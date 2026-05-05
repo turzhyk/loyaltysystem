@@ -10,8 +10,4 @@
       <ProjectReference Include="..\LoyaltySystem.Domain\LoyaltySystem.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-     
-    </ItemGroup>
-
 </Project>

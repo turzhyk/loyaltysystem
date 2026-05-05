@@ -11,5 +11,10 @@ public class DiscountStrategyFactory
         _strategies = strategies.ToDictionary(x => x.ApplyTo);
     }
 
-    public IDiscountStrategy Get(DiscountApplyTo applyTo) => _strategies[applyTo];
+    public IDiscountStrategy Get(DiscountApplyTo applyTo)
+    {
+        if (!_strategies.ContainsKey(applyTo))
+            throw new KeyNotFoundException($"no calculator for type {applyTo}");
+        return _strategies[applyTo];
+    }
 }

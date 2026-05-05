@@ -14,4 +14,5 @@ public class ProductDbContext:DbContext
     public DbSet<UserDiscountEntity> UserDiscounts { get; set; }
     public DbSet<VoucherEntity> GlobalVouchers { get; set; }
     public DbSet<UserVoucherEntity> UserVouchers { get; set; }
+    
 }

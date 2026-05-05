@@ -11,7 +11,7 @@ namespace LoyaltySystem.Infrastructure.Repositories;
 public class DiscountRepository : IDiscountRepo
 {
     private readonly ProductDbContext _context;
-    
+
 
     public DiscountRepository(ProductDbContext context)
     {
@@ -34,5 +34,27 @@ public class DiscountRepository : IDiscountRepo
             .Where(i => i.UserId == userId && !i.IsDeleted)
             .ToListAsync(cToken);
         return result.MapToUserDiscount();
+    }
+
+    public async Task<Discount?> GetById(Guid id, CancellationToken cToken)
+    {
+        var result = await _context.GlobalDiscounts.
+            Where(x => x.Id == id)
+            .FirstOrDefaultAsync(cToken);
+        return result.MapToDiscount();
+    }
+
+    public async Task<UserDiscount?> GetUserDiscountById(Guid userId, Guid discountId, CancellationToken cToken)
+    {
+        var result = await _context.UserDiscounts.
+            Where(x => x.DiscountId == discountId && x.UserId == userId)
+            .FirstOrDefaultAsync(cToken);
+        return result.MapToUserDiscount();
+    }
+
+    public async Task AddUserDiscount(UserDiscount userDiscount, CancellationToken cToken)
+    {
+        await _context.AddAsync(userDiscount.MapToEntity());
+        await _context.SaveChangesAsync();
     }
 }

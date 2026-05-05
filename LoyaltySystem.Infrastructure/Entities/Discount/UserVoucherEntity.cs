@@ -2,6 +2,7 @@
 
 public class UserVoucherEntity
 {
+    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public Guid VoucherId { get; set; }
     public DateTime ObtainedAt { get; set; }

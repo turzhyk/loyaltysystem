@@ -2,6 +2,7 @@
 
 public class UserDiscountEntity
 {
+    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public Guid DiscountId { get; set; }
     public decimal ProductsLeft { get; set; }

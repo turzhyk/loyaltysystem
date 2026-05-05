@@ -16,6 +16,19 @@ public class UserRepository:IUserRepository
         _context = context;
     }
 
+    public async Task<bool> UserWithIdExists(Guid id, CancellationToken cToken)
+    {
+        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+        return user is not null;
+    }
+
+    public async Task<User> GetById(Guid id, CancellationToken cToken)
+    {
+      var userEntity =   await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+      if (userEntity is null)
+          return null;
+      return userEntity.MapToUser();
+    }
     public async Task<Guid?> GetIdByPhone(string phone)
     {
         var result = await _context.Users.AsNoTracking().Where(u => u.Phone == phone).FirstOrDefaultAsync();

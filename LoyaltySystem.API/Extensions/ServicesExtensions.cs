@@ -16,6 +16,8 @@ public static class ServicesExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IDiscountRepo, DiscountRepository>();
         services.AddScoped<ICartCalculator, CartCalculator>();
+        services.AddScoped<DiscountStrategyFactory>();
+        services.AddScoped<IDiscountStrategy, GroupDiscountStrategy>();
         return services;
     }
 }

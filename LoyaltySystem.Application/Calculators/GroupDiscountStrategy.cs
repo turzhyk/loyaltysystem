@@ -15,11 +15,10 @@ public class GroupDiscountStrategy : IDiscountStrategy
             .FindAll(x => (discount.ProductsId.Contains(x.ProductId) && !x.DiscountApplied));
         if (matchingItems.Count == 0)
             return;
-
+        
         limit ??= (int)discount.Limit;
         int maxByCount = matchingItems.Count - matchingItems.Count % discount.GroupSize;
-        int discountableItemsCount = Math.Min(maxByCount, limit ?? 0);
-
+        int discountableItemsCount = Math.Min(maxByCount, limit??1000);
         if (discountableItemsCount == 0)
             return;
 
@@ -29,7 +28,7 @@ public class GroupDiscountStrategy : IDiscountStrategy
         foreach (var _item in group)
         {
             _item.UnitDiscount = _item.UnitPrice * (discount.Percent / 100.0m);
-            _item.DiscountApplied = true;
+            _item.DiscountApplied = true; Console.WriteLine($"Discount {_item.UnitDiscount}");
         }
 
         var productsLeft = (int)limit - discountableItemsCount;

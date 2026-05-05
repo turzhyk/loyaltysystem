@@ -1,5 +1,6 @@
 ﻿using LoyaltySystem.Application.Abstractions;
 using LoyaltySystem.Application.DTOs.Checkout;
+using LoyaltySystem.Application.DTOs.Discount;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoyaltySystem.API.Controllers;
@@ -15,8 +16,16 @@ public class CheckoutController:ControllerBase
         _service = service;
     }
     [HttpPost]
-    public async Task<ActionResult> GetCart([FromBody] CartRequestDto dto)
+    public async Task<ActionResult> GetCart([FromBody] CartRequestDto dto, CancellationToken cToken)
     {
+        var result = await _service.GetCalculatedCart(dto, cToken);
+        return Ok(result);
+    }
+
+    [HttpPost("discount/active")]
+    public async Task<ActionResult> ActivateDiscount([FromBody] ActivateDiscountRequest dto, CancellationToken cToken)
+    {
+        await _service.ActivateDiscount(dto.userId, dto.discountId, cToken);
         return Ok();
     }
 }
