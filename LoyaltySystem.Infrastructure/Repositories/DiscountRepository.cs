@@ -38,16 +38,14 @@ public class DiscountRepository : IDiscountRepo
 
     public async Task<Discount?> GetById(Guid id, CancellationToken cToken)
     {
-        var result = await _context.GlobalDiscounts.
-            Where(x => x.Id == id)
+        var result = await _context.GlobalDiscounts.Where(x => x.Id == id)
             .FirstOrDefaultAsync(cToken);
         return result.MapToDiscount();
     }
 
     public async Task<UserDiscount?> GetUserDiscountById(Guid userId, Guid discountId, CancellationToken cToken)
     {
-        var result = await _context.UserDiscounts.
-            Where(x => x.DiscountId == discountId && x.UserId == userId)
+        var result = await _context.UserDiscounts.Where(x => x.DiscountId == discountId && x.UserId == userId)
             .FirstOrDefaultAsync(cToken);
         return result.MapToUserDiscount();
     }
@@ -56,5 +54,31 @@ public class DiscountRepository : IDiscountRepo
     {
         await _context.AddAsync(userDiscount.MapToEntity());
         await _context.SaveChangesAsync();
+    }
+    
+
+    public async Task UpdateUserDiscounts(Guid userId, IEnumerable<UserDiscount> userDiscounts, CancellationToken cToken)
+    {
+        foreach (var discount in userDiscounts)
+        {
+            var existing = await _context.UserDiscounts
+                .Where(x => x.UserId == userId && x.DiscountId == discount.DiscountId && !x.IsDeleted)
+                .FirstOrDefaultAsync(cToken);
+            if (existing is null)
+            {
+                var newDiscount = new UserDiscountEntity
+                {
+                    Id = Guid.NewGuid(), DiscountId = discount.DiscountId, IsDeleted = false, UserId = userId,
+                    LastUsedAt = discount.LastUsedAt, ProductsLeft = discount.ProductsLeft
+                };
+                await _context.AddAsync(newDiscount, cToken);
+            }
+            else
+            {
+                existing.LastUsedAt = discount.LastUsedAt;
+                existing.ProductsLeft = discount.ProductsLeft;
+            }
+        }
+        await _context.SaveChangesAsync(cToken);
     }
 }

@@ -1,5 +1,5 @@
 ## About
-..
+![image](diagram.webp)
 ## Starting up
 1. clone the repo  
    `git clone github.com/turzhyk/loyaltysystem`

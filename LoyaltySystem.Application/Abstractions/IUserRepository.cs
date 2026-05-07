@@ -9,4 +9,6 @@ public interface IUserRepository
     public Task<User> GetById(Guid id, CancellationToken cToken);
 
     public Task<Guid> Create(User user, CancellationToken cToken);
+
+    public Task<int> AddPoints(Guid userId, int count, CancellationToken cToken);
 }

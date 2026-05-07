@@ -44,4 +44,15 @@ public class UserRepository:IUserRepository
         await _context.SaveChangesAsync();
         return entity.Id;
     }
+
+    public async Task<int> AddPoints(Guid userId, int count, CancellationToken cToken)
+    {
+        var userEntity = await _context.Users
+            .FirstOrDefaultAsync(x => x.Id == userId,cToken);
+        if (userEntity is null)
+            return 0;
+        userEntity!.Points += count;
+        await _context.SaveChangesAsync(cToken);
+        return userEntity!.Points;
+    }
 }

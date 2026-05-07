@@ -1,6 +1,7 @@
 ﻿using LoyaltySystem.Application.Abstractions;
 using LoyaltySystem.Application.DTOs.User;
 using LoyaltySystem.Application.Exceptions;
+using LoyaltySystem.Domain.Models.Discount;
 using LoyaltySystem.Domain.Models.User;
 
 namespace LoyaltySystem.Application.Services;
@@ -8,11 +9,13 @@ namespace LoyaltySystem.Application.Services;
 public class UserService:IUserService
 {
     private readonly IUserRepository _repo;
+    private readonly IDiscountRepo _discountRepo;
     private readonly IConfirmationService _confirmationService;
 
-    public UserService(IUserRepository repo,  IConfirmationService confirmationService)
+    public UserService(IUserRepository repo, IDiscountRepo discountRepo,  IConfirmationService confirmationService)
     {
         _repo = repo;
+        _discountRepo = discountRepo;
         _confirmationService = confirmationService;
     }
     public async Task<UserResponseDTO> Get(Guid id, CancellationToken cToken)
@@ -58,4 +61,27 @@ public class UserService:IUserService
         throw new NotImplementedException();
     }
     
+    public async Task ActivateDiscount(Guid userId, Guid discountId, CancellationToken cToken)
+    {
+        var discount = await _discountRepo.GetById(discountId, cToken);
+        if (discount is null)
+            throw new KeyNotFoundException($"Discount with id {discountId} does not exist");
+        bool isActivated = await _discountRepo.GetUserDiscountById(userId, discountId, cToken) is not null;
+        if (isActivated)
+            throw new Exception("Discount is already active");
+        var userDiscount = new UserDiscount
+        {
+            Id = Guid.NewGuid(), DiscountId = discountId, UserId = userId, LastUsedAt = DateTime.UtcNow,
+            ProductsLeft = discount.Limit
+        };
+        await _discountRepo.AddUserDiscount(userDiscount, cToken);
+    }
+
+    public async Task<int> AddPoints(Guid userId, int count, CancellationToken cToken)
+    {
+        var exists = await _repo.UserWithIdExists(userId, cToken);
+        if (!exists)
+            throw new UserNotFoundException();
+        return await _repo.AddPoints(userId, count, cToken);
+    }
 }

@@ -10,4 +10,5 @@ public interface IDiscountRepo
     public Task<Discount?> GetById(Guid id, CancellationToken cToken);
     public Task<UserDiscount?> GetUserDiscountById(Guid userId, Guid discountId, CancellationToken cToken);
     public Task AddUserDiscount(UserDiscount userDiscount, CancellationToken cToken);
+    public Task UpdateUserDiscounts(Guid userId,IEnumerable<UserDiscount> userDiscounts, CancellationToken cToken);
 }

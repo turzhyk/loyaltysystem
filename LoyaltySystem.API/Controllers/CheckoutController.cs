@@ -22,10 +22,5 @@ public class CheckoutController:ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("discount/active")]
-    public async Task<ActionResult> ActivateDiscount([FromBody] ActivateDiscountRequest dto, CancellationToken cToken)
-    {
-        await _service.ActivateDiscount(dto.userId, dto.discountId, cToken);
-        return Ok();
-    }
+  
 }
