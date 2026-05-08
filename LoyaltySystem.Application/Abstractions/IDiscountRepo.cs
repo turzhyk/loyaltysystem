@@ -6,6 +6,7 @@ namespace LoyaltySystem.Application.Abstractions;
 public interface IDiscountRepo
 {
     public Task<List<Discount>> GetByProductAsync(Guid productId, CancellationToken cToken);
+    public Task<List<Discount>> GetByProductsAsync(List<Guid> productIds, CancellationToken cToken);
     public Task<List<UserDiscount>> GetUserDiscounts(Guid userId, CancellationToken cToken);
     public Task<Discount?> GetById(Guid id, CancellationToken cToken);
     public Task<UserDiscount?> GetUserDiscountById(Guid userId, Guid discountId, CancellationToken cToken);

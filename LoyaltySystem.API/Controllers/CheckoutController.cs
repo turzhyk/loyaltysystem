@@ -22,5 +22,10 @@ public class CheckoutController:ControllerBase
         return Ok(result);
     }
 
-  
+    [HttpPost("confirm")]
+    public async Task<ActionResult> SaleConfirm([FromBody] SaleConfirmRequest dto, CancellationToken cToken)
+    {
+        
+        return Ok();
+    }
 }

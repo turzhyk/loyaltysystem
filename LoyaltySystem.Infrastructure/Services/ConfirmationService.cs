@@ -4,7 +4,7 @@ namespace LoyaltySystem.Infrastructure.Services;
 
 public class ConfirmationService:IConfirmationService
 {
-    public async Task SendCofirmationRequest(Guid userId, string phone)
+    public async Task SendConfirmationRequest(Guid userId, string phone)
     {
         // send SMS with activation code
     }

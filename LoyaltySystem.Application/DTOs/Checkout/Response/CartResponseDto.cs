@@ -1,3 +1,8 @@
-﻿namespace LoyaltySystem.Application.DTOs.Checkout;
+﻿using LoyaltySystem.Application.DTOs.Discount;
 
-public record CartResponseDto(List<CartItemResponseDto> Items);
+namespace LoyaltySystem.Application.DTOs.Checkout;
+
+public record CartResponseDto(
+    List<CartItemResponseDto> Items,
+    IEnumerable<UserDiscountDto> UserDiscounts
+);

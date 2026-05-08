@@ -28,9 +28,6 @@ namespace LoyaltySystem.Infrastructure.Migrations.UserDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Coins")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -48,6 +45,9 @@ namespace LoyaltySystem.Infrastructure.Migrations.UserDb
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

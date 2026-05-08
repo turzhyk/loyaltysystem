@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LoyaltySystem.Infrastructure.Migrations.UserDb
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20260505142020_userinit")]
+    [Migration("20260508074811_userinit")]
     partial class userinit
     {
         /// <inheritdoc />
@@ -31,9 +31,6 @@ namespace LoyaltySystem.Infrastructure.Migrations.UserDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Coins")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -51,6 +48,9 @@ namespace LoyaltySystem.Infrastructure.Migrations.UserDb
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

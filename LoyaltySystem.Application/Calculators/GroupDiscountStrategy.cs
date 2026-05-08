@@ -28,7 +28,7 @@ public class GroupDiscountStrategy : IDiscountStrategy
         foreach (var _item in group)
         {
             _item.UnitDiscount = _item.UnitPrice * (discount.Percent / 100.0m);
-            _item.DiscountApplied = true; Console.WriteLine($"Discount {_item.UnitDiscount}");
+            _item.DiscountApplied = true; 
         }
 
         var productsLeft = (int)limit - discountableItemsCount;

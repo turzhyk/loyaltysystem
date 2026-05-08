@@ -4,5 +4,5 @@ public record UserResponseDTO(
     Guid Id,
     string Name,
     string Email,
-    int Coins
+    int Points
 );

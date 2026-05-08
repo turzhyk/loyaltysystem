@@ -27,6 +27,14 @@ public class DiscountRepository : IDiscountRepo
         return result.MapToDiscount();
     }
 
+    public async Task<List<Discount>> GetByProductsAsync(List<Guid> productIds, CancellationToken cToken)
+    {
+        var result = await _context.GlobalDiscounts
+            .AsNoTracking()
+            .Where(x => x.ProductsId.Any(i => productIds.Contains(i))).ToListAsync(cToken);
+        return result.MapToDiscount();
+    }
+
     public async Task<List<UserDiscount>> GetUserDiscounts(Guid userId, CancellationToken cToken)
     {
         var result = await _context.UserDiscounts
