@@ -1,5 +1,5 @@
 ## About
-It's an API that is used for customer loalty program.
+It's an API that is used for customer loyalty program.
 
 ![image](diagram.webp)
 ## Features
@@ -9,8 +9,10 @@ It's an API that is used for customer loalty program.
 - Cart price calculation for individual user based on global discounts, specific discounts, coupons and vouchers
 - Adding and managing global discounts, coupons, vouchers
 
-## Installation
-   `git clone github.com/turzhyk/loyaltysystem`
+## Installation and Starting Up
+1. `git clone github.com/turzhyk/loyaltysystem`
+2. `cd loyaltysystem`
+3.  `docker compose up`
 ## Structure
 This API uses Clean Architecture including layers:
 - API (controllers, middleware)
@@ -18,10 +20,10 @@ This API uses Clean Architecture including layers:
 - Domain (domain models, enums)
 - Infrastructure (database contexts, entities, seeders)
 
-## Techonologies and Tools
+## Technologies and Tools
 - .NET 8
-- Strategy & Factory Patterns (to divide and incapsulate calculators for different Discount Types)
-- EF Core (for convinient interactions with DB)
-- Docker with Postgres conatainer (database)
+- Strategy & Factory Patterns (to divide and encapsulate calculators for different Discount Types)
+- EF Core (for convenient interactions with DB)
+- Docker with Postgres container (database)
 - Moq + xUnit (for unit tests)
 
