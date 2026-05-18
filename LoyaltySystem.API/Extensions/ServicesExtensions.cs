@@ -18,6 +18,7 @@ public static class ServicesExtensions
         services.AddScoped<ICartCalculator, CartCalculator>();
         services.AddScoped<DiscountStrategyFactory>();
         services.AddScoped<IDiscountStrategy, GroupDiscountStrategy>();
+        services.AddScoped<IDiscountStrategy, CheapestOneStrategy>();
         return services;
     }
 }
