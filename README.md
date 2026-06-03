@@ -11,6 +11,7 @@ It's an API that is used for customer loalty program.
 
 ## Installation
    `git clone github.com/turzhyk/loyaltysystem`
+
 ## Structure
 This API uses Clean Architecture including layers:
 - API (controllers, middleware)
