@@ -31,6 +31,7 @@ public class CheckoutService : ICheckoutService
         var applicableDiscounts = new List<Discount>();
         var _itemIds = cart.Items.Select(x => x.ProductId).ToList();
         applicableDiscounts.AddRange(await _repo.GetByProductsAsync(_itemIds, cToken));
+        Console.WriteLine("applicable discounts: "+applicableDiscounts.Count);
 
         //  get used user discounts from repo
 

@@ -27,7 +27,7 @@ public class CartCalculator : ICartCalculator
                 continue;
 
             decimal? limit = userDiscounts.Find(x => x.DiscountId == discount.Id)?.ProductsLeft;
-
+            Console.WriteLine("apply to:" + discount.ApplyTo);
             var strategy = _factory.Get(discount.ApplyTo);
             strategy.Apply(cart, discount, (int?)limit, userDiscounts, now);
         }
