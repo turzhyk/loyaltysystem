@@ -3,11 +3,11 @@
     image: postgres:15
     container_name: loyaltyDB
     ports:
-      - "5432:5432"
+      - "5434:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345
-      POSTGRES_DB: userdb
+      POSTGRES_DB: db
     volumes:
       - ./docker/postgres/data/:/var/lib/postgresql/data
 

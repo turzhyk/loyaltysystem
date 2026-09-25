@@ -16,7 +16,7 @@ public class CheckoutController:ControllerBase
         _service = service;
     }
     [HttpPost]
-    public async Task<ActionResult> GetCart([FromBody] CartRequestDto dto, CancellationToken cToken)
+    public async Task<ActionResult> GetCart([FromBody] CartRequest dto, CancellationToken cToken)
     {
         var result = await _service.GetCalculatedCart(dto, cToken);
         return Ok(result);

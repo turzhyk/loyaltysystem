@@ -8,10 +8,9 @@ public static class DbContextExtension
 {
     public static IServiceCollection AddDb(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<UserDbContext>(options => options.UseNpgsql(configuration["ConnectionStrings:UserDB"]));
         services.AddDbContext<ProductDbContext>(options => options.UseNpgsql(configuration["ConnectionStrings:ProductDB"]));
         services.AddScoped<DiscountSeeder>();
-        services.AddScoped<UserSeeder>();
+        services.AddScoped<CustomerSeeder>();
         
         return services;
     }

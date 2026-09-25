@@ -8,15 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoyaltySystem.Infrastructure.Repositories;
 
-public class DiscountRepository : IDiscountRepo
+public class DiscountRepository(ProductDbContext context) : IDiscountRepo
 {
-    private readonly ProductDbContext _context;
+    private readonly ProductDbContext _context = context;
 
-
-    public DiscountRepository(ProductDbContext context)
-    {
-        _context = context;
-    }
 
     public async Task<List<Discount>> GetByProductAsync(Guid productId, CancellationToken cToken)
     {
@@ -27,7 +22,7 @@ public class DiscountRepository : IDiscountRepo
         return result.MapToDiscount();
     }
 
-    public async Task<List<Discount>> GetByProductsAsync(List<Guid> productIds, CancellationToken cToken)
+    public async Task<List<Discount>> GetByProductsAsync(IEnumerable<Guid> productIds, CancellationToken cToken)
     {
         var result = await _context.GlobalDiscounts
             .AsNoTracking()
@@ -35,9 +30,9 @@ public class DiscountRepository : IDiscountRepo
         return result.MapToDiscount();
     }
 
-    public async Task<List<UserDiscount>> GetUserDiscounts(Guid userId, CancellationToken cToken)
+    public async Task<List<CustomerDiscount>> GetUserDiscountsByUserIdAsync(Guid userId, CancellationToken cToken)
     {
-        var result = await _context.UserDiscounts
+        var result = await _context.CustomerDiscounts
             .AsNoTracking()
             .Where(i => i.UserId == userId && !i.IsDeleted)
             .ToListAsync(cToken);
@@ -51,30 +46,30 @@ public class DiscountRepository : IDiscountRepo
         return result.MapToDiscount();
     }
 
-    public async Task<UserDiscount?> GetUserDiscountById(Guid userId, Guid discountId, CancellationToken cToken)
+    public async Task<CustomerDiscount?> GetUserDiscountById(Guid userId, Guid discountId, CancellationToken cToken)
     {
-        var result = await _context.UserDiscounts.Where(x => x.DiscountId == discountId && x.UserId == userId)
+        var result = await _context.CustomerDiscounts.Where(x => x.DiscountId == discountId && x.UserId == userId)
             .FirstOrDefaultAsync(cToken);
         return result.MapToUserDiscount();
     }
 
-    public async Task AddUserDiscount(UserDiscount userDiscount, CancellationToken cToken)
+    public async Task AddUserDiscount(CustomerDiscount customerDiscount, CancellationToken cToken)
     {
-        await _context.AddAsync(userDiscount.MapToEntity());
+        await _context.AddAsync(customerDiscount.MapToEntity());
         await _context.SaveChangesAsync();
     }
     
 
-    public async Task UpdateUserDiscounts(Guid userId, IEnumerable<UserDiscount> userDiscounts, CancellationToken cToken)
+    public async Task UpdateUserDiscounts(Guid userId, IEnumerable<CustomerDiscount> userDiscounts, CancellationToken cToken)
     {
         foreach (var discount in userDiscounts)
         {
-            var existing = await _context.UserDiscounts
+            var existing = await _context.CustomerDiscounts
                 .Where(x => x.UserId == userId && x.DiscountId == discount.DiscountId && !x.IsDeleted)
                 .FirstOrDefaultAsync(cToken);
             if (existing is null)
             {
-                var newDiscount = new UserDiscountEntity
+                var newDiscount = new CustomerDiscountEntity
                 {
                     Id = Guid.NewGuid(), DiscountId = discount.DiscountId, IsDeleted = false, UserId = userId,
                     LastUsedAt = discount.LastUsedAt, ProductsLeft = discount.ProductsLeft

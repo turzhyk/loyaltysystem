@@ -10,13 +10,13 @@ public static class ServicesExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<Application.Abstractions.ICustomerService, CustomerService>();
         services.AddScoped<ICheckoutService, CheckoutService>();
         services.AddScoped<IConfirmationService, ConfirmationService>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IDiscountRepo, DiscountRepository>();
         services.AddScoped<ICartCalculator, CartCalculator>();
-        services.AddScoped<DiscountStrategyFactory>();
+        services.AddScoped<DiscountStrategyResolver>();
         services.AddScoped<IDiscountStrategy, GroupDiscountStrategy>();
         services.AddScoped<IDiscountStrategy, CheapestOneStrategy>();
         return services;

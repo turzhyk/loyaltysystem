@@ -7,18 +7,18 @@ namespace LoyaltySystem.Application.Calculators;
 public class CheapestOneStrategy : IDiscountStrategy
 {
     public DiscountApplyTo ApplyTo => DiscountApplyTo.Cheapest;
-    public void Apply(Cart cart, Discount discount, int? limit, List<UserDiscount> userDiscounts, DateTime now)
+    public CustomerDiscount? Apply(Cart cart, Discount discount, int? limit, CustomerDiscount? customerDiscount, DateTime now)
     {
         var matchingItems = cart.Items
             .FindAll(x => (discount.ProductsId.Contains(x.ProductId) && !x.DiscountApplied));
         Console.WriteLine("matching items: "+ matchingItems.Count);
-        if(matchingItems.Count == 0)
-            return;
+        if (matchingItems.Count == 0)
+            return null;
         limit ??= (int)discount.Limit;
         int maxByCount = matchingItems.Count - matchingItems.Count % discount.GroupSize;
         int discountableItemsCount = Math.Min(maxByCount, limit??1000);
         if (discountableItemsCount == 0)
-            return;
+            return null;
         
         var group = matchingItems
             .OrderBy(x => x.UnitPrice)
@@ -26,9 +26,20 @@ public class CheapestOneStrategy : IDiscountStrategy
         var discountableItem = group.FirstOrDefault();
         if(group.Any())
             discountableItem.UnitDiscount = discountableItem.UnitPrice * (discount.Percent / 100.0m);
+        
+        var productsLeft = (int)limit - discountableItemsCount;
         foreach (var _item in group)
         {
             _item.DiscountApplied = true;
+        }
+        if (customerDiscount is null)
+            return new CustomerDiscount
+                { Id = Guid.NewGuid(), DiscountId = discount.Id, ProductsLeft = productsLeft };
+       
+        {
+            customerDiscount.LastUsedAt = now;
+            customerDiscount.ProductsLeft = productsLeft;
+            return null;
         }
     }
 }

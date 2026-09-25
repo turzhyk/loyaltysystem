@@ -1,10 +1,11 @@
-﻿namespace LoyaltySystem.Domain.Models.Discount;
+﻿namespace LoyaltySystem.Infrastructure.Entities.Discount;
 
-public class UserDiscount
+public class CustomerDiscountEntity
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public Guid DiscountId { get; set; }
     public decimal ProductsLeft { get; set; }
     public DateTime LastUsedAt { get; set; }
+    public bool IsDeleted { get; set; }
 }

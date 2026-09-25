@@ -5,5 +5,6 @@ public enum DiscountApplyTo
    Group,
    Cheapest,
    Weight,
+   Individual,
    Everything
 }

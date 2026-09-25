@@ -9,7 +9,7 @@ public class UserDbContext:DbContext
     {
         
     }
-    public DbSet<UserEntity> Users { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

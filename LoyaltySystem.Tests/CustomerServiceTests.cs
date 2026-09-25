@@ -7,19 +7,19 @@ using Xunit;
 
 namespace LoyaltySystem.Tests;
 
-public class UserServiceTests
+public class CustomerServiceTests
 {
-    private readonly Mock<IUserRepository> _mockRepo;
+    private readonly Mock<ICustomerRepository> _mockRepo;
     private readonly Mock<IDiscountRepo> _mockDiscountRepo;
     private readonly Mock<IConfirmationService> _mockConfirmationService;
-    private readonly IUserService _service;
+    private readonly Application.Abstractions.ICustomerService _service;
 
-    public UserServiceTests()
+    public CustomerServiceTests()
     {
         _mockConfirmationService = new Mock<IConfirmationService>();
-        _mockRepo = new Mock<IUserRepository>();
+        _mockRepo = new Mock<ICustomerRepository>();
         _mockDiscountRepo = new Mock<IDiscountRepo>();
-        _service = new UserService(_mockRepo.Object, _mockDiscountRepo.Object, _mockConfirmationService.Object);
+        _service = new CustomerService(_mockRepo.Object, _mockDiscountRepo.Object, _mockConfirmationService.Object);
     }
 
     [Fact]
@@ -29,9 +29,9 @@ public class UserServiceTests
         var expectedResponse = new User { Id = guid, Email = "test@mail.com", IsConfirmed = true };
 
         _mockRepo.Setup(x =>
-            x.UserWithIdExists(guid, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            x.UserWithIdExistsAsync(guid, It.IsAny<CancellationToken>())).ReturnsAsync(true);
         _mockRepo.Setup(x =>
-            x.GetById(guid, It.IsAny<CancellationToken>())).ReturnsAsync(expectedResponse);
+            x.GetByIdAsync(guid, It.IsAny<CancellationToken>())).ReturnsAsync(expectedResponse);
 
         var result = await _service.Get(guid, CancellationToken.None);
         Assert.Equal(guid, result.Id);
@@ -44,7 +44,7 @@ public class UserServiceTests
         var expectedResponse = new User { Id = guid, Email = "test@mail.com", IsConfirmed = true };
 
         _mockRepo.Setup(x =>
-            x.UserWithIdExists(guid, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            x.UserWithIdExistsAsync(guid, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
         await Assert.ThrowsAsync<UserNotFoundException>(() => _service.Get(guid, CancellationToken.None));
     }

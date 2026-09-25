@@ -3,40 +3,56 @@ using LoyaltySystem.Application.DTOs.Checkout;
 using LoyaltySystem.Application.DTOs.Discount;
 using LoyaltySystem.Domain.Models.Checkout;
 using LoyaltySystem.Domain.Models.Discount;
+using Microsoft.Extensions.Logging;
 
 namespace LoyaltySystem.Application.Services;
 
-public class CheckoutService : ICheckoutService
+public class CheckoutService(
+    IDiscountRepo discountRepo,
+    ICustomerService customerService,
+    ICartCalculator calculator,
+    ILogger<CheckoutService> logger)
+    : ICheckoutService
 {
-    private readonly IDiscountRepo _repo;
-    private readonly ICartCalculator _calculator;
-
-    public CheckoutService(IDiscountRepo repo, ICartCalculator calculator)
+    public async Task<CartResponseDto> GetCalculatedCart(CartRequest dto, CancellationToken cToken)
     {
-        _repo = repo;
-        _calculator = calculator;
-    }
-
-    public async Task<CartResponseDto> GetCalculatedCart(CartRequestDto dto, CancellationToken cToken)
-    {
-        Cart cart = new Cart();
-        cart.Items = dto.Items.Select(x => new CartItem
+        Cart cart = new Cart
         {
-            ProductId = x.ProductId,
-            Count = x.Count,
-            UnitPrice = x.UnitPrice
-        }).ToList();
+            Items = dto.Items.Select(x => new CartItem
+            {
+                ProductId = x.ProductId,
+                Count = x.Count,
+                UnitPrice = x.UnitPrice
+            }).ToList()
+        };
+        IEnumerable<Guid> cartItemsIds = cart.Items.Select(x => x.ProductId).ToList();
 
         // Guid userId = await _userService.GetUserIdBy(dto.UserCode, cToken);
         var applicableDiscounts = new List<Discount>();
-        var _itemIds = cart.Items.Select(x => x.ProductId).ToList();
-        applicableDiscounts.AddRange(await _repo.GetByProductsAsync(_itemIds, cToken));
-        Console.WriteLine("applicable discounts: "+applicableDiscounts.Count);
+        applicableDiscounts.AddRange(await discountRepo.GetByProductsAsync(cartItemsIds, cToken));
+        logger.LogInformation("available {count} for the cart with {itemCount} items in it", applicableDiscounts.Count,
+            cartItemsIds.Count());
+        Console.WriteLine("applicable discounts: " + applicableDiscounts.Count);
 
-        //  get used user discounts from repo
+        Guid? customerId = null;
+        try
+        {
+            customerId = await customerService.GetUserIdByPersonalCodeAsync(dto.UserCode, cToken);
+            Console.WriteLine($"User id is {customerId}");
+        }
+        catch
+        {
+        }
+        List<CustomerDiscount>? customerDiscounts = null;
+        if (customerId is Guid id)
+        {
+            customerDiscounts = await discountRepo.GetUserDiscountsByUserIdAsync(id, cToken);
+            Console.WriteLine(customerDiscounts.Count);
+        }
 
-        var calculationResult = _calculator.GetCalculated(cart, applicableDiscounts,
-            new List<UserDiscount>(), DateTime.UtcNow);
+
+        var calculationResult = calculator.GetCalculated(cart, applicableDiscounts,
+            customerDiscounts, DateTime.UtcNow);
         var items = calculationResult.NewCart.Items.Select(x =>
             new CartItemResponseDto(ProductId: x.ProductId, Count: x.Count,
                 UnitPrice: x.UnitPrice, UnitDiscount: x.UnitDiscount)).ToList();
@@ -44,17 +60,17 @@ public class CheckoutService : ICheckoutService
 
 
         var response = new CartResponseDto(Items: items,
-            UserDiscounts: usedDiscounts.Select(x => new UserDiscountDto(x.Id, x.DiscountId, x.ProductsLeft)));
+            UsedDiscounts: usedDiscounts.Select(x => new CustomerDiscountDto(x.Id, x.DiscountId, x.ProductsLeft)));
         return response;
     }
 
     public async Task ApplyDiscounts(SaleConfirmRequest dto, CancellationToken cToken)
     {
-        var usedDiscounts = dto.Discounts.Select(x => new UserDiscount
+        var usedDiscounts = dto.Discounts.Select(x => new CustomerDiscount
         {
             Id = x.Id, DiscountId = x.DiscountId, UserId = dto.UserId, ProductsLeft = x.ProductsLeft,
             LastUsedAt = DateTime.UtcNow
         }).ToList();
-        await _repo.UpdateUserDiscounts(dto.UserId, usedDiscounts, cToken);
+        await discountRepo.UpdateUserDiscounts(dto.UserId, usedDiscounts, cToken);
     }
 }

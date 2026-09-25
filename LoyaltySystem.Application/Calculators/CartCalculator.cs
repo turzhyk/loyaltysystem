@@ -5,35 +5,36 @@ using LoyaltySystem.Domain.Models.Discount;
 
 namespace LoyaltySystem.Application.Calculators;
 
-public class CartCalculator : ICartCalculator
+public class CartCalculator(DiscountStrategyResolver resolver) : ICartCalculator
 {
-    private readonly DiscountStrategyFactory _factory;
-
-    public CartCalculator(DiscountStrategyFactory factory)
-    {
-        _factory = factory;
-    }
-
     public CalculationResult GetCalculated(Cart cart, List<Discount> discounts,
-        List<UserDiscount> userDiscounts, DateTime now)
+        List<CustomerDiscount>? customerDiscounts, DateTime now)
     {
-        CalculationResult result = new CalculationResult( );
-        List<UserDiscount> usedUserDiscounts = new List<UserDiscount>();
-        
+        CalculationResult result = new CalculationResult();
+        List<CustomerDiscount> usedUserDiscounts = new List<CustomerDiscount>();
+
         foreach (var discount in discounts)
         {
-            if (discount.NeedActivation &&
-                userDiscounts.Find(x => x.DiscountId == discount.Id) is null)
+            if (!DiscountIsActivatedOrAllowed(discount, customerDiscounts))
                 continue;
 
-            decimal? limit = userDiscounts.Find(x => x.DiscountId == discount.Id)?.ProductsLeft;
-            Console.WriteLine("apply to:" + discount.ApplyTo);
-            var strategy = _factory.Get(discount.ApplyTo);
-            strategy.Apply(cart, discount, (int?)limit, userDiscounts, now);
+            CustomerDiscount? customerDiscount = customerDiscounts?.Find(x => x.DiscountId == discount.Id);
+            Console.WriteLine(customerDiscount.DiscountId);
+            decimal? limit = customerDiscount?.ProductsLeft;
+            // Console.WriteLine("apply to:" + discount.ApplyTo);
+            var strategy = resolver.Get(discount.ApplyTo);
+            strategy.Apply(cart, discount, (int?)limit, customerDiscount, now);
         }
 
         result.NewCart = cart;
         result.UsedDiscounts = usedUserDiscounts;
         return result;
+    }
+
+    private bool DiscountIsActivatedOrAllowed(Discount discount, List<CustomerDiscount>? customerDiscounts)
+    {
+        if (!discount.NeedActivation)
+            return true;
+        return customerDiscounts?.Find(x => x.DiscountId == discount.Id) != null;
     }
 }

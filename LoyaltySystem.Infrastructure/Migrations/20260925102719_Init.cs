@@ -7,11 +7,44 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LoyaltySystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class productinit : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "CustomerDiscounts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DiscountId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductsLeft = table.Column<decimal>(type: "numeric", nullable: false),
+                    LastUsedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerDiscounts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Points = table.Column<int>(type: "integer", nullable: false),
+                    Phone = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsConfirmed = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "GlobalDiscounts",
                 columns: table => new
@@ -47,22 +80,6 @@ namespace LoyaltySystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserDiscounts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DiscountId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductsLeft = table.Column<decimal>(type: "numeric", nullable: false),
-                    LastUsedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserDiscounts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserVouchers",
                 columns: table => new
                 {
@@ -83,13 +100,16 @@ namespace LoyaltySystem.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CustomerDiscounts");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
                 name: "GlobalDiscounts");
 
             migrationBuilder.DropTable(
                 name: "GlobalVouchers");
-
-            migrationBuilder.DropTable(
-                name: "UserDiscounts");
 
             migrationBuilder.DropTable(
                 name: "UserVouchers");

@@ -9,38 +9,38 @@ namespace LoyaltySystem.API.Controllers;
 [Route("api/users")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly ICustomerService _icUstomerService;
 
-    public UserController(IUserService userService)
+    public UserController(ICustomerService icUstomerService)
     {
-        _userService = userService;
+        _icUstomerService = icUstomerService;
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<UserResponseDTO>> GetUser(Guid id, CancellationToken cToken)
     {
-        var result = await _userService.Get(id, cToken);
+        var result = await _icUstomerService.Get(id, cToken);
         return result;
     }
 
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] UserCreateRequestDto dto, CancellationToken cToken)
     {
-        await _userService.Create(dto, cToken);
+        await _icUstomerService.Create(dto, cToken);
         return Ok();
     }
 
     [HttpPost("confirm")]
     public async Task<ActionResult<string>> Confirm([FromBody] UserConfirmRequestDto dto, CancellationToken cToken)
     {
-        var result = await _userService.Confirm(dto, cToken);
+        var result = await _icUstomerService.Confirm(dto, cToken);
         return Ok(result);
     }
 
     [HttpPost("discount")]
     public async Task<ActionResult> ActivateDiscount([FromBody] ActivateDiscountRequest dto, CancellationToken cToken)
     {
-        await _userService.ActivateDiscount(dto.userId, dto.discountId, cToken);
+        await _icUstomerService.ActivateDiscount(dto.userId, dto.discountId, cToken);
         return Ok();
     }
 
@@ -48,7 +48,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult<int>> AddUserPoints(string id, [FromBody] AddPointsRequest dto,
         CancellationToken cToken)
     {
-        var result = _userService.AddPoints(new Guid(id), dto.count, cToken);
+        var result = _icUstomerService.AddPoints(new Guid(id), dto.count, cToken);
         return Ok(result);
     }
 }

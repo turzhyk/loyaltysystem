@@ -7,5 +7,5 @@ namespace LoyaltySystem.Application.Calculators;
 public interface IDiscountStrategy
 {
     DiscountApplyTo ApplyTo { get; }
-    void Apply(Cart cart, Discount discount, int? limit, List<UserDiscount> userDiscounts, DateTime now);
+    CustomerDiscount? Apply(Cart cart, Discount discount, int? limit, CustomerDiscount? customerDiscount, DateTime now);
 }

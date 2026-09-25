@@ -23,6 +23,32 @@ namespace LoyaltySystem.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("LoyaltySystem.Infrastructure.Entities.Discount.CustomerDiscountEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DiscountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastUsedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("ProductsLeft")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerDiscounts");
+                });
+
             modelBuilder.Entity("LoyaltySystem.Infrastructure.Entities.Discount.DiscountEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -60,32 +86,6 @@ namespace LoyaltySystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GlobalDiscounts");
-                });
-
-            modelBuilder.Entity("LoyaltySystem.Infrastructure.Entities.Discount.UserDiscountEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("DiscountId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("LastUsedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("ProductsLeft")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserDiscounts");
                 });
 
             modelBuilder.Entity("LoyaltySystem.Infrastructure.Entities.Discount.UserVoucherEntity", b =>
@@ -132,6 +132,37 @@ namespace LoyaltySystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GlobalVouchers");
+                });
+
+            modelBuilder.Entity("LoyaltySystem.Infrastructure.Entities.User.CustomerEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
                 });
 #pragma warning restore 612, 618
         }

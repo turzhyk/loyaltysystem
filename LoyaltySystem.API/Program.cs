@@ -22,13 +22,11 @@ app.UseExceptionHandler("/Error");
 
 using (var scope = app.Services.CreateScope())
 {
-    var userDb = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-    await userDb.Database.MigrateAsync();
     var productDb = scope.ServiceProvider.GetRequiredService<ProductDbContext>();
     await productDb.Database.MigrateAsync();
     var seeder = scope.ServiceProvider.GetRequiredService<DiscountSeeder>();
     await seeder.Seed();
-    var seeder2 = scope.ServiceProvider.GetRequiredService<UserSeeder>();
+    var seeder2 = scope.ServiceProvider.GetRequiredService<CustomerSeeder>();
     await seeder2.Seed();
 }
 

@@ -2,11 +2,11 @@
 
 namespace LoyaltySystem.Application.Calculators;
 
-public class DiscountStrategyFactory
+public class DiscountStrategyResolver
 {
     private readonly Dictionary<DiscountApplyTo, IDiscountStrategy> _strategies;
 
-    public DiscountStrategyFactory(IEnumerable<IDiscountStrategy> strategies)
+    public DiscountStrategyResolver(IEnumerable<IDiscountStrategy> strategies)
     {
         _strategies = strategies.ToDictionary(x => x.ApplyTo);
     }

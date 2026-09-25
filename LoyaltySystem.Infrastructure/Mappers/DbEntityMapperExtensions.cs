@@ -20,11 +20,11 @@ public static class DbEntityMapperExtensions
         }).ToList();
     }
 
-    public static List<UserDiscount> MapToUserDiscount(this List<UserDiscountEntity> entities)
+    public static List<CustomerDiscount> MapToUserDiscount(this List<CustomerDiscountEntity> entities)
     {
         if (entities == null)
-            return new List<UserDiscount>();
-        return entities.Select(entity => new UserDiscount
+            return new List<CustomerDiscount>();
+        return entities.Select(entity => new CustomerDiscount
         {
             UserId = entity.UserId, DiscountId = entity.DiscountId, LastUsedAt = entity.LastUsedAt,
             ProductsLeft = entity.ProductsLeft
@@ -43,37 +43,37 @@ public static class DbEntityMapperExtensions
         };
     }
 
-    public static UserDiscountEntity MapToEntity(this UserDiscount x)
+    public static CustomerDiscountEntity MapToEntity(this CustomerDiscount x)
     {
         if (x == null)
             return null;
-        return new UserDiscountEntity
+        return new CustomerDiscountEntity
         {
             Id = x.Id, DiscountId = x.DiscountId, LastUsedAt = x.LastUsedAt, ProductsLeft = x.ProductsLeft,
             UserId = x.UserId, IsDeleted = false
         };
     }
-    public static UserDiscount MapToUserDiscount(this UserDiscountEntity entity)
+    public static CustomerDiscount MapToUserDiscount(this CustomerDiscountEntity entity)
     {
         if (entity == null)
             return null;
-        return new UserDiscount
+        return new CustomerDiscount
         {
             UserId = entity.UserId, DiscountId = entity.DiscountId, LastUsedAt = entity.LastUsedAt,
             ProductsLeft = entity.ProductsLeft
         };
     }
 
-    public static UserEntity MapToUserEntity(this User user)
+    public static CustomerEntity MapToEntity(this User user)
     {
-        return new UserEntity
+        return new CustomerEntity
         {
             Id = user.Id, Phone = user.Phone, IsConfirmed = user.IsConfirmed,
             CreatedAt = user.CreatedAt, Name = user.Name
         };
     }
 
-    public static User MapToUser(this UserEntity entity)
+    public static User MapToModel(this CustomerEntity entity)
     {
         return new User
         {

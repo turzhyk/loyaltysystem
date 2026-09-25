@@ -4,5 +4,5 @@ namespace LoyaltySystem.Application.DTOs.Checkout;
 
 public record SaleConfirmRequest(
     Guid UserId,
-    IEnumerable<UserDiscountDto> Discounts
+    IEnumerable<CustomerDiscountDto> Discounts
 );
